@@ -8,7 +8,6 @@ export const options = {
 
 export default function() {
     http.get('https://quickpizza.grafana.com/')
-
     sleep(1)
 
     http.get("https://quickpizza.grafana.com/login")
