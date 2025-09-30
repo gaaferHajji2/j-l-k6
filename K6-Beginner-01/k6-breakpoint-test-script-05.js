@@ -9,6 +9,7 @@ export const options = {
             target: 10000
         }
     ]
+    
     // vus: 100,
     // duration: '30s'
 }
