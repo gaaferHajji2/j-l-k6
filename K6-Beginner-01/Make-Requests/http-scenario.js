@@ -8,5 +8,5 @@ export default function() {
 
     const t2 = http.get('https://example.com/test.php')
     console.log(`The status code ${t2.status}, and status text ${t2.status_text}`)
-    check(true, {"jloka-02": (t2) => t2.status != 200})
+    check(t2, {"jloka-02": (t2) => t2.status != 200 && t2.status < 500})
 }
