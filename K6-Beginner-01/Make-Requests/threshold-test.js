@@ -4,7 +4,18 @@ import { check, sleep } from 'k6'
 export const options = {
     vus: 2,
     duration: '3s',
+    thresholds: {
+
+    // Simple threshold: 95% of requests must be below 1000ms
+    http_req_duration: ['p(95)<1000'],
     
+    // Or be more strict: 99% of requests must be below 1000ms
+    // http_req_duration: ['p(99)<1000'],
+    
+    // Or require ALL requests to be below 1000ms
+    // http_req_duration: ['max<1000'],
+
+  },
 
 }
 
