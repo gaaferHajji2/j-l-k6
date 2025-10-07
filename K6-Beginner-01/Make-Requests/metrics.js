@@ -5,7 +5,6 @@ export const options = {
     vus: 20,
     duration: '15s',
     thresholds: {
-
     // Simple threshold: 95% of requests must be below 1000ms
     http_req_duration: ['p(95)<1000'],
 
