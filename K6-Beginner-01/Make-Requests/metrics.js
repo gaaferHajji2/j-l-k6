@@ -16,7 +16,7 @@ export const options = {
     // more than 20-req in total
     http_reqs: ['count>20'],
 
-    //bigger that 5 req per second
+    //bigger that 3 req per second
     http_reqs: ['rate>3']
     
     // Or be more strict: 99% of requests must be below 1000ms

@@ -1,6 +1,7 @@
 import http from 'k6/http'
 import { check, sleep } from 'k6'
 import exec from 'k6/execution'
+import { Counter } from 'k6/metrics'
 
 export const options = {
   vus: 20,
@@ -18,23 +19,23 @@ export const options = {
 		//bigger that 2 req per second
 		http_reqs: ['rate>2'],
 
-		checks: ['rate>0.9']
+		checks: ['rate>0.9'],
+
+    jlokaCounter: ['count>20']
   },
 }
 
+let jlokaCounter = new Counter('jlokaCounter')
+
 export default function() {
-    const t1 = http.get('https://example.com/')
+    const t1 = http.get('https://example.com/' + (exec.scenario.iterationInTest % 2 == 1 ? 'jloka' : ''))
     console.log(`The status code ${t1.status}, and status text ${t1.status_text}`)
     check(t1, { 
-        "jloka-01": (t1) => t1.status == 200, 
+        "jloka-01": (t1) => t1.status == 200 && jlokaCounter.add(1), 
         "jloka-test-01": (t1) => t1.body.includes('Example')
     })
 
-    const t2 = http.get('https://example.com/test.php')
-    console.log(`The status code ${t2.status}, and status text ${t2.status_text}`)
-    check(t2, {"jloka-02": (t2) => t2.status >= 300 && t2.status < 500})
-
-    console.log(exec.scenario.iterationInTest)
+    // jlokaCounter.add(1)
 
     sleep(2)
 }
