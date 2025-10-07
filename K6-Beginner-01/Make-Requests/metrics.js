@@ -2,15 +2,23 @@ import http from 'k6/http'
 import { check, sleep } from 'k6'
 
 export const options = {
-    vus: 2,
-    duration: '2s',
+    vus: 20,
+    duration: '15s',
     thresholds: {
 
     // Simple threshold: 95% of requests must be below 1000ms
     http_req_duration: ['p(95)<1000'],
 
     // here we use 75% because we request not found page
-    http_req_failed: ['rate<0.50']
+    http_req_failed: ['rate<0.75'],
+
+    // http_req_failed: ['count<40'],
+
+    // more than 20-req in total
+    http_reqs: ['count>20'],
+
+    //bigger that 5 req per second
+    http_reqs: ['rate>3']
     
     // Or be more strict: 99% of requests must be below 1000ms
     // http_req_duration: ['p(99)<1000'],
