@@ -6,8 +6,10 @@ export const options = {
     vus: 25,
     duration: '5s',
     thresholds: {
-        http_errors: ['count==0'],
-        'http_req_duration{createUser:creating}': ['p(95)<150']
+        'http_errors{createUser:creating}': ['count==0'],
+        'http_req_duration{createUser:creating}': ['p(95)<150'],
+        'checks{createUser:creating}': ['rate>0.95'],
+        http_errors: ['count==0']
     }
 }
 
@@ -27,15 +29,20 @@ export default function() {
         { name: 'JLoka-01' }, 
         {
             tags: {
+                // here we can define multiple tags
                 createUser: 'creating'
             }
         }
     )
     if(res.error){
-        httpErrors.add(1)
+        httpErrors.add(1, {
+            createUser: 'creating'
+        })
     }
     check(res, {
         'posting_user': (res) => res.status == 201
+    }, {
+        createUser: 'creating'
     })
 
     sleep(1)
